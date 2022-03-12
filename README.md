@@ -10,3 +10,9 @@
 ```bash
 ./install-airflow.sh
 ```
+
+## Commands
+
+```bash
+export AIRFLOW_HOME=${PWD}
+```
