@@ -2,18 +2,28 @@ from datetime import datetime
 
 from airflow import DAG
 from airflow.operators.bash import BashOperator
+from airflow.operators.subdag import SubDagOperator
+
+from subdags.sub_parallel_running import sub_parallel_running
 
 
 with DAG(
     dag_id="parallel_running",
-    start_date=datetime(2022, 1, 1),
     schedule_interval="@daily",
-    catchup=False,
-    default_args={},
+    default_args={
+        "start_date": datetime(2022, 1, 1),
+        "catchup": False,
+    },
 ) as dag:
     task_1 = BashOperator(task_id="task_1", bash_command="sleep 3")
-    task_2 = BashOperator(task_id="task_2", bash_command="sleep 3")
-    task_3 = BashOperator(task_id="task_3", bash_command="sleep 3")
+    processing = SubDagOperator(
+        task_id="processing_tasks",
+        subdag=sub_parallel_running(
+            parent_dag_id=dag.dag_id,
+            child_dag_id="processing_tasks",
+            default_args=dag.default_args,
+        ),
+    )
     task_4 = BashOperator(task_id="task_4", bash_command="sleep 3")
 
-    task_1 >> [task_2, task_3] >> task_4
+    task_1 >> processing >> task_4
