@@ -46,7 +46,7 @@ redis-logs:
 	docker logs -f airflow-queue
 
 redis-status:
-	docker ps -ef name=airflow-queue
+	docker ps -f name=airflow-queue
 
 flower-up:
 	airflow celery flower -D
