@@ -16,4 +16,12 @@ make airflow-up
 
 ```bash
 make pg-up
+make redis-up
+```
+
+## Celery Executor
+
+```bash
+make flower-up
+make worker-up
 ```

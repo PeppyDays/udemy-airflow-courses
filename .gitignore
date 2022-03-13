@@ -1,8 +1,11 @@
 ### Airflow template
 logs
-airflow.cfg
 *.db
-airflow-webserver.pid
+airflow-webserver.*
+airflow-webserver-monitor.*
+airflow-scheduler.*
+airflow-flower.*
+airflow-worker.*
 standalone_admin_password.txt
 webserver_config.py
 
