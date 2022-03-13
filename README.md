@@ -5,14 +5,15 @@
 - ..
 - ..
 
-## Setup
+## Setup and Run
 
 ```bash
-./install-airflow.sh
+make airflow-install
+make airflow-up
 ```
 
-## Commands
+## Local Executor
 
 ```bash
-export AIRFLOW_HOME=${PWD}
+make pg-up
 ```
