@@ -32,11 +32,7 @@ def _choose_best_model(ti: TaskInstance):
         key="model_accuracy",
         task_ids=task_ids,
     )
-    for accuracy in accuracies:
-        if accuracy > 5:
-            return "accurate"
-
-    return "inaccurate"
+    return ["accurate", "inaccurate"]
 
 
 with DAG(
@@ -69,4 +65,6 @@ with DAG(
     accurate = DummyOperator(task_id="accurate")
     inaccurate = DummyOperator(task_id="inaccurate")
 
-    downloading_data >> processing_tasks >> choose_model >> [accurate, inaccurate]
+    storing = DummyOperator(task_id="storing", trigger_rule="one_success")
+
+    downloading_data >> processing_tasks >> choose_model >> [accurate, inaccurate] >> storing
