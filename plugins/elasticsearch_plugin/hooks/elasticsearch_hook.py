@@ -21,8 +21,8 @@ class ElasticsearchHook(BaseHook):
     def info(self):
         return self.es.info()
 
-    def add_doc(self, index: str, doc_type, doc):
-        res = self.es.index(index=index, doc_type=doc_type, doc=doc)
+    def add_doc(self, index: str, document):
+        res = self.es.index(index=index, document=document)
         return res
 
     def get_conn(self) -> Any:

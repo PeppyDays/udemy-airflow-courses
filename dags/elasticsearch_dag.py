@@ -4,6 +4,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 
 from elasticsearch_plugin.hooks.elasticsearch_hook import ElasticsearchHook
+from elasticsearch_plugin.operators.postgres_to_elasticsearch import PostgresToElasticsearchOperator
 
 
 def _print_es_info():
@@ -22,3 +23,10 @@ with DAG(
         task_id="print_es_info",
         python_callable=_print_es_info,
     )
+    connections_to_es = PostgresToElasticsearchOperator(
+        task_id="connections_to_es",
+        sql="SELECT * FROM connection",
+        index="connections",
+    )
+
+    print_es_info >> connections_to_es
