@@ -73,3 +73,15 @@ worker-logs:
 
 worker-status:
 	cat airflow-worker.pid
+
+es-up:
+	docker run --name airflow-es -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -d docker.elastic.co/elasticsearch/elasticsearch:7.17.1
+
+es-down:
+	docker rm airflow-es -f -v
+
+es-logs:
+	docker logs -f airflow-es
+
+es-status:
+	docker ps -f name=airflow-es

@@ -4,7 +4,7 @@ apache-airflow-providers-cncf-kubernetes==3.1.0
 apache-airflow-providers-postgres==4.0.0
 apache-airflow-providers-celery==2.1.1
 apache-airflow-providers-redis==2.0.2
-
+elasticsearch==8.1.0
 virtualenv==20.13.3
 
 black==22.1.0
