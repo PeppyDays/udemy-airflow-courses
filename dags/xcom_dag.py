@@ -4,6 +4,8 @@ from random import uniform
 from airflow import DAG
 from airflow.models import TaskInstance
 from airflow.operators.bash import BashOperator
+from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import BranchPythonOperator
 from airflow.operators.python import PythonOperator
 from airflow.utils.task_group import TaskGroup
 
@@ -32,6 +34,10 @@ def _choose_best_model(ti: TaskInstance):
     print(accuracies)
 
 
+def _is_accurate():
+    return "accurate"
+
+
 with DAG(
     "xcom_dag", schedule_interval="@daily", default_args=default_args, catchup=False
 ) as dag:
@@ -57,4 +63,12 @@ with DAG(
 
     choose_model = PythonOperator(task_id="choose_model", python_callable=_choose_best_model)
 
+    is_accurate = BranchPythonOperator(
+        task_id="is_accurate",
+        python_callable=_is_accurate
+    )
+    accurate = DummyOperator(task_id="accurate")
+    inaccurate = DummyOperator(task_id="inaccurate")
+
     downloading_data >> processing_tasks >> choose_model
+    choose_model >> is_accurate >> [accurate, inaccurate]

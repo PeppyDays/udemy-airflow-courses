@@ -6,7 +6,7 @@ airflow-webserver-monitor.*
 airflow-scheduler.*
 airflow-flower.*
 airflow-worker.*
-standalone_admin_password.txt
+airflow.cfg
 webserver_config.py
 
 
