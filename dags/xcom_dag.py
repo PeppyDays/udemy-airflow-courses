@@ -23,19 +23,20 @@ def _training_model(ti: TaskInstance):
 
 def _choose_best_model(ti: TaskInstance):
     print("choose best model")
+    task_ids = [
+        "processing_tasks.training_model_a",
+        "processing_tasks.training_model_b",
+        "processing_tasks.training_model_c",
+    ]
     accuracies = ti.xcom_pull(
         key="model_accuracy",
-        task_ids=[
-            "processing_tasks.training_model_a",
-            "processing_tasks.training_model_b",
-            "processing_tasks.training_model_c",
-        ],
+        task_ids=task_ids,
     )
-    print(accuracies)
+    for accuracy in accuracies:
+        if accuracy > 5:
+            return "accurate"
 
-
-def _is_accurate():
-    return "accurate"
+    return "inaccurate"
 
 
 with DAG(
@@ -61,14 +62,11 @@ with DAG(
             task_id="training_model_c", python_callable=_training_model
         )
 
-    choose_model = PythonOperator(task_id="choose_model", python_callable=_choose_best_model)
-
-    is_accurate = BranchPythonOperator(
-        task_id="is_accurate",
-        python_callable=_is_accurate
+    choose_model = BranchPythonOperator(
+        task_id="choose_model",
+        python_callable=_choose_best_model,
     )
     accurate = DummyOperator(task_id="accurate")
     inaccurate = DummyOperator(task_id="inaccurate")
 
-    downloading_data >> processing_tasks >> choose_model
-    choose_model >> is_accurate >> [accurate, inaccurate]
+    downloading_data >> processing_tasks >> choose_model >> [accurate, inaccurate]

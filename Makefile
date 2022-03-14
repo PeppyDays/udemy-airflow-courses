@@ -11,10 +11,10 @@ airflow-up:
 	airflow webserver -D
 
 airflow-down:
-	kill $(shell cat airflow-scheduler.pid)
+	kill -9 $(shell cat airflow-scheduler.pid)
 	rm -rf airflow-scheduler.*
-	kill $(shell cat airflow-webserver.pid)
-	kill $(shell cat airflow-webserver-monitor.pid)
+	kill -9 $(shell cat airflow-webserver.pid)
+	kill -9 $(shell cat airflow-webserver-monitor.pid)
 	rm -rf airflow-webserver.*
 
 airflow-logs:
@@ -52,7 +52,7 @@ flower-up:
 	airflow celery flower -D
 
 flower-down:
-	kill $(shell cat airflow-flower.pid)
+	kill -9 $(shell cat airflow-flower.pid)
 	rm -rf airflow-flower.*
 
 flower-logs:
@@ -65,7 +65,7 @@ worker-up:
 	airflow celery worker -D
 
 worker-down:
-	kill $(shell cat airflow-worker.pid)
+	kill -9 $(shell cat airflow-worker.pid)
 	rm -rf airflow-worker.*
 
 worker-logs:
